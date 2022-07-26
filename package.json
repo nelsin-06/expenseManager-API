@@ -1,5 +1,5 @@
 {
-  "name": "api-rest-nel",
+  "name": "expense-manager",
   "version": "1.0.0",
   "description": "Proyecto donde se pondran a prueba conceptos de buenas practicas en typescript",
   "main": "index.js",
