@@ -5,7 +5,7 @@ config()
 const env = {
   ENV: process.env.ENVIRONMENT,
   PORT: process.env.PORT,
-  // TOKEN_ACCES_WORD: process.env.ACCESS_TOKEN_SECRET_WORD,
+  TOKEN_ACCES_WORD: process.env.SECRET_WORD_JWT,
   // GOOGLE: {
   //   CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   //   CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
