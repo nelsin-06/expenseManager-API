@@ -13,7 +13,7 @@ interface errorReturnData {
   realErrorMsg?: string
 }
 
-export class ValidationError extends Error {
+export class ErrorApp extends Error {
   private readonly appError: ErrorType
   private readonly httpCode: number
 
@@ -44,7 +44,7 @@ export default (err: any, req: Request, res: Response, _next: NextFunction): any
     }
   }
 
-  if (err instanceof ValidationError) {
+  if (err instanceof ErrorApp) {
     httpCodeStatus = err.getHttpCodeData()
     errorReturn.dataError = err.getErrorData()
     errorReturn.realError = err.getRealError()
@@ -68,12 +68,12 @@ export default (err: any, req: Request, res: Response, _next: NextFunction): any
   return res.status(httpCodeStatus).json(errorReturn)
 }
 
-// throw ValidationError("Property not found: name")
+// throw ErrorApp("Property not found: name")
 
 // try {
-//   validateForm() // code that throws a ValidationError
+//   validateForm() // code that throws a ErrorApp
 // } catch (e) {
-//   if (e instanceof ValidationError)
+//   if (e instanceof ErrorApp)
 //   // do something
 //   else
 //   // do something else
