@@ -1,12 +1,12 @@
 import { Router } from 'express'
 import { registerWhitEmail, changePass, loginWhitEmail, resetPass } from '../controller/auth.controller'
 import { validatorErrors } from '../helpers/validateErrors'
-import { RegisterUserCheck } from '../validators/expressValidator'
+import { RegisterUserCheck, LoginUserCheck } from '../validators/expressValidator'
 
 const router = Router()
 
 router.post('/register', RegisterUserCheck, validatorErrors, registerWhitEmail)
-router.get('/login', loginWhitEmail)
+router.post('/login', LoginUserCheck, validatorErrors, loginWhitEmail)
 router.get('/reset-pass', resetPass)
 router.get('/change-pass', changePass)
 

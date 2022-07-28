@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request, Response, NextFunction } from 'express'
 import { ErrorApp } from '../middleware/ErrorsManager'
-import { EMAIL_DIPLICATE } from '../utils/listErrors'
+import { EMAIL_DIPLICATE, WRONG_LOGIN, USERNAME_DIPLICATE } from '../utils/listErrors'
 import UserModel from '../models/auth.model'
 import { generateJWToken } from '../helpers/generateTokenJWT'
 
@@ -9,8 +10,10 @@ export const registerWhitEmail = async (req: Request, res: Response, next: NextF
     const { username, email, password } = req.body
 
     const checkEmail = await UserModel.emailExist(email)
-
     if (checkEmail) throw new ErrorApp(EMAIL_DIPLICATE, 400)
+
+    const checkUsername = await UserModel.usernameExist(username)
+    if (checkUsername) throw new ErrorApp(USERNAME_DIPLICATE, 400)
 
     const newUser = new UserModel({
       username, email, password, typeRegister: 'CO'
@@ -18,19 +21,30 @@ export const registerWhitEmail = async (req: Request, res: Response, next: NextF
 
     await newUser.save()
 
-    const asd = await generateJWToken('nelsonGallego', 'asdf1234')
+    const accessToken = await generateJWToken(username, newUser._id)
 
-    console.log(asd)
-
-    res.json({ ok: true, message: 'Registro exitoso', token: 'asd123' })
+    res.status(200).json({ ok: true, message: 'Registro exitoso', accessToken })
   } catch (e: any) {
     next(e)
   }
 }
 
-export const loginWhitEmail = (_req: Request, res: Response, next: NextFunction): void => {
+export const loginWhitEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    res.json('RUTA LOGIN')
+    const { userOrEmail, password } = req.body
+
+    const userApp = await UserModel.findOne({ $or: [{ email: userOrEmail }, { username: userOrEmail }] })
+    if (!userApp) throw new ErrorApp(WRONG_LOGIN, 404)
+
+    const checkPassword = await UserModel.isCorrectPassword(password, userApp.password)
+
+    if (checkPassword) {
+      const accessToken = await generateJWToken(userApp.email, userApp._id)
+
+      res.status(200).json({ ok: true, message: 'Login exitoso', accessToken })
+    } else {
+      throw new ErrorApp(WRONG_LOGIN, 404)
+    }
   } catch (e: any) {
     next(e)
   }

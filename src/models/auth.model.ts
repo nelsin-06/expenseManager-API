@@ -15,7 +15,7 @@ import { compare, hash } from 'bcrypt'
   }
 })
 class User {
-  @prop({ type: String, required: true })
+  @prop({ type: String, required: true, unique: true, lowercase: true, trim: true })
   username!: string
 
   @prop({ type: String, required: true, unique: true, lowercase: true, trim: true })
@@ -35,6 +35,18 @@ class User {
   static async emailExist (this: ReturnModelType<typeof User>, email: string): Promise<boolean> {
     const checkEmail = await this.findOne({ email }, { email: 1 })
     if (checkEmail == null) {
+      return false
+    } return true
+  }
+
+  /**
+   * @param this Parametro para poder acceder a metodo .findOne.
+   * @param username Username que vamos a verificar.
+   * @returns Boolean.
+   */
+  static async usernameExist (this: ReturnModelType<typeof User>, username: string): Promise<boolean> {
+    const checkUsername = await this.findOne({ username }, { username: 1 })
+    if (checkUsername == null) {
       return false
     } return true
   }
