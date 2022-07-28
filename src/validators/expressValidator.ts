@@ -46,11 +46,6 @@ export const LoginUserCheck = checkSchema({
 }, ['body'])
 
 export const changePasswordUserCheck = checkSchema({
-  userOrEmail: {
-    exists: { errorMessage: 'Debe existir el campo "userOrEmail" en el formulario.', bail: true },
-    notEmpty: { errorMessage: 'Debe ingresar un username o email valido.' },
-    toLowerCase: true
-  },
   oldPassword: {
     exists: { errorMessage: 'Debe existir el campo "password" en el formulario.', bail: true },
     notEmpty: { errorMessage: 'La password no puede estar vacia.', bail: true }

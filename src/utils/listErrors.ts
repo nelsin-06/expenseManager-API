@@ -21,3 +21,8 @@ export const USERNAME_DIPLICATE = {
   message: 'El username con el cual te intentas registrar ya existe.',
   code: 1004
 }
+
+export const WRONG_PASSWORD = {
+  message: 'La password antigua es incorrecta.',
+  code: 1005
+}
