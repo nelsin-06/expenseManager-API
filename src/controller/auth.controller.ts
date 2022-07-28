@@ -58,9 +58,10 @@ export const resetPass = (_req: Request, res: Response, next: NextFunction): voi
   }
 }
 
-export const changePass = (_req: Request, res: Response, next: NextFunction): void => {
+export const changePass = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    res.json('RUTA CHANGE PASS')
+    const { userOrEmail, oldPassword, newPassword, confirmPassword } = req.body
+    
   } catch (e: any) {
     next(e)
   }
