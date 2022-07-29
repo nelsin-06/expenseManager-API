@@ -58,7 +58,7 @@ export const resetPass = (_req: Request, res: Response, next: NextFunction): voi
   }
 }
 
-export const changePass = async (req: Request, res: Response, next: NextFunction): any => {
+export const changePass = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const { oldPassword, newPassword } = req.body
 
