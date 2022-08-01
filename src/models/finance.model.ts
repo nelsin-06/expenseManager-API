@@ -16,6 +16,9 @@ class Finance {
 
   @prop({ type: Number, trim: true })
   nonFixedExpenses: number | undefined // Gastos hormiga
+
+  @prop({ type: String, trim: true })
+  userId: string | undefined // Gastos hormiga
 }
 
 const financeModel = getModelForClass(Finance, { schemaOptions: { versionKey: false } })
