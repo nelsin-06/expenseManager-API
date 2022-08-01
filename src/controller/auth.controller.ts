@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import { ErrorApp } from '../middleware/ErrorsManager'
 import { EMAIL_DIPLICATE, WRONG_LOGIN, USERNAME_DIPLICATE, WRONG_PASSWORD } from '../utils/listErrors'
 import UserModel from '../models/auth.model'
+import FinanceModel from '../models/finance.model'
 import { generateJWToken } from '../helpers/generateTokenJWT'
 
 export const registerWhitEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -19,9 +20,15 @@ export const registerWhitEmail = async (req: Request, res: Response, next: NextF
       username, email, password, typeRegister: 'CO'
     })
 
-    await newUser.save()
+    const newFinanceUser = new FinanceModel({
+      income: 0,
+      userId: newUser._id
+    })
 
-    const accessToken = await generateJWToken(newUser._id)
+    await newUser.save()
+    await newFinanceUser.save()
+
+    const accessToken = await generateJWToken(newUser._id, newFinanceUser._id)
 
     res.status(200).json({ ok: true, message: 'Registro exitoso', accessToken })
   } catch (e: any) {
@@ -39,7 +46,11 @@ export const loginWhitEmail = async (req: Request, res: Response, next: NextFunc
     const checkPassword = await UserModel.isCorrectPassword(password, userApp.password)
 
     if (checkPassword) {
-      const accessToken = await generateJWToken(userApp._id)
+      const walletUser = await FinanceModel.findOne({ userId: userApp._id })
+
+      if (!walletUser) throw new ErrorApp(WRONG_LOGIN, 404)
+
+      const accessToken = await generateJWToken(userApp._id, walletUser._id)
 
       res.status(200).json({ ok: true, message: 'Login exitoso', accessToken })
     } else {
