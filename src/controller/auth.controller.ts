@@ -21,7 +21,7 @@ export const registerWhitEmail = async (req: Request, res: Response, next: NextF
 
     await newUser.save()
 
-    const accessToken = await generateJWToken(username, newUser._id)
+    const accessToken = await generateJWToken(newUser._id)
 
     res.status(200).json({ ok: true, message: 'Registro exitoso', accessToken })
   } catch (e: any) {
@@ -39,7 +39,7 @@ export const loginWhitEmail = async (req: Request, res: Response, next: NextFunc
     const checkPassword = await UserModel.isCorrectPassword(password, userApp.password)
 
     if (checkPassword) {
-      const accessToken = await generateJWToken(userApp.email, userApp._id)
+      const accessToken = await generateJWToken(userApp._id)
 
       res.status(200).json({ ok: true, message: 'Login exitoso', accessToken })
     } else {
