@@ -2,23 +2,23 @@
 import { getModelForClass, prop } from '@typegoose/typegoose'
 
 class Finance {
-  @prop({ type: Number, required: true, trim: true })
+  @prop({ type: Number, required: true })
   income: number | undefined // Ingresos
 
-  @prop({ type: Number, trim: true })
+  @prop({ type: Number })
   fixedCosts: number | undefined // Gastos fijos
 
-  @prop({ type: Number, trim: true })
+  @prop({ type: Number })
   saving: number | undefined // Ahorro
 
-  @prop({ type: Number, trim: true })
+  @prop({ type: Number })
   moneyRemaining: number | undefined // Dinero restante
 
-  @prop({ type: Number, trim: true })
+  @prop({ type: Number })
   nonFixedExpenses: number | undefined // Gastos hormiga
 
   @prop({ type: String, trim: true })
-  userId: string | undefined // Gastos hormiga
+  userId: string | undefined // userId
 }
 
 const financeModel = getModelForClass(Finance, { schemaOptions: { versionKey: false } })
