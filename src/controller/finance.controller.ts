@@ -35,9 +35,13 @@ export const fixedCosts = async (req: Request, res: Response, next: NextFunction
       fixedCostUpload.imgBill = urlImg
     }
 
-    await FinanceModel.findByIdAndUpdate({ _id: walletId }, { $push: { fixedCosts: fixedCostUpload } })
+    const returnUpdate = await FinanceModel.findByIdAndUpdate({ _id: walletId }, { $push: { fixedCosts: fixedCostUpload } }, { rawResult: true }).where('income').gte(Number(fixedCostUpload.total))
 
-    res.json({ ok: true, message: 'Gasto agregado exitosamente' })
+    if (returnUpdate.lastErrorObject?.updatedExisting) {
+      res.json({ ok: true, message: 'Gasto agregado exitosamente' })
+    } else {
+      res.json({ ok: false, message: 'Los gastos no deberian superar los ingresos.' })
+    }
   } catch (e: any) {
     next(e)
   }
