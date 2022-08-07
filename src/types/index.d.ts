@@ -7,3 +7,8 @@ declare global {
     }
   }
 }
+export interface FixedCostType {
+  description: string
+  total: number
+  imgBill: undefined | string
+}

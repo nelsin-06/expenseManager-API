@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express'
-import { income } from '../controller/finance.controller'
+import { income, fixedCosts } from '../controller/finance.controller'
 import path from 'path'
 import fileUpload from 'express-fileupload'
 
@@ -12,7 +12,7 @@ router.use(fileUpload({
 }))
 
 router.post('/income', income)
+router.post('/fixedCosts', fixedCosts)
 router.post('/saving')
-router.post('/fixedCosts')
 
 export default router

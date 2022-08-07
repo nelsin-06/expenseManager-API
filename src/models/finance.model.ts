@@ -5,8 +5,12 @@ class Finance {
   @prop({ type: Number, required: true })
   income: number | undefined // Ingresos
 
-  @prop({ type: Number })
-  fixedCosts: number | undefined // Gastos fijos
+  @prop({ type: Array })
+  fixedCosts: Array<{
+    description: string
+    total: number
+    imgBill?: string
+  }> | undefined // Gastos fijos
 
   @prop({ type: Number })
   saving: number | undefined // Ahorro
