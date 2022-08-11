@@ -46,3 +46,19 @@ export const fixedCosts = async (req: Request, res: Response, next: NextFunction
     next(e)
   }
 }
+
+export const saving = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    // AWAUI SE VA A HACER LA OPERACION DE AHORRO Y SE VA A DECIR CUANTO QUIERE AHORRAR Y EN CUENTOS MESES y se hace el calculo
+    const { walletId } = req.auth
+
+    const { time, totalSaving } = req.body
+    const savingReal = Number(totalSaving) / Number(time)
+
+    await FinanceModel.findByIdAndUpdate({ _id: walletId }, { saving: Math.round(savingReal) })
+
+    res.status(201).json({ ok: true, message: 'El ahorro se establecio correctamente.' })
+  } catch (e: any) {
+    next(e)
+  }
+}
